@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" media="screen" th:href="@{/css/bootstrap-5.1.3-dist/css/bootstrap.css}"/>
+    <link rel="stylesheet" media="screen" th:href="@{/css/mystyle.css}"/>
+
+    <style type="text/css">
+        ul.countdown {
+            list-style: none;
+            margin: 75px 0;
+            padding: 0;
+            display: block;
+            text-align: center;
+        }
+
+        ul.countdown li {
+            display: inline-block;
+        }
+
+        ul.countdown li span {
+            font-size: 80px;
+            font-weight: 300;
+            line-height: 80px;
+        }
+
+        ul.countdown li.seperator {
+            font-size: 80px;
+            line-height: 70px;
+            vertical-align: top;
+        }
+
+        ul.countdown li p {
+            color: #a7abb1;
+            font-size: 14px;
+        }
+
+
+    </style>
+    <title>Document</title>
+</head>
+<body>
+<div id="countdown-vote">
+    <ul class="countdown">
+        <li>
+            <span class="days">00</span>
+            <p class="days_ref">days</p>
+        </li>
+        <li class="seperator">.</li>
+        <li>
+            <span class="hours">00</span>
+            <p class="hours_ref">hours</p>
+        </li>
+        <li class="seperator">:</li>
+        <li>
+            <span class="minutes">00</span>
+            <p class="minutes_ref">minutes</p>
+        </li>
+        <li class="seperator">:</li>
+        <li>
+            <span class="seconds">00</span>
+            <p class="seconds_ref">seconds</p>
+        </li>
+    </ul>
+</div>
+
+
+<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquerycountdown.js}"></script>
+<script type="text/javascript" th:src="@{/js/myscript.js}"/>
+
+
+<!--<script type="text/javascript">-->
+
+<!--    $("#countdown-vote")-->
+<!--        .countdown("2023/01/01", function(event) {-->
+<!--            $(".days").text(-->
+<!--                event.strftime("%D")-->
+<!--            );-->
+<!--            $(".hours").text(-->
+<!--                event.strftime("%H")-->
+<!--            );-->
+<!--            $(".minutes").text(-->
+<!--                event.strftime("%M")-->
+<!--            );-->
+<!--            $(".seconds").text(-->
+<!--                event.strftime("%S")-->
+<!--            );-->
+<!--        });-->
+<!--</script>-->
+
+</body>
+</html>

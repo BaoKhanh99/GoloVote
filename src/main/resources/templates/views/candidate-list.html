@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" media="screen" th:href="@{/css/bootstrap-5.1.3-dist/css/bootstrap.css}"/>
+    <link rel="stylesheet" media="screen" th:href="@{/css/mystyle.css}"/>
+
+    <script th:src="@{https://code.jquery.com/jquery-3.2.1.slim.min.js}"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js}"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js}"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js}"></script>
+    <title>Candidate List</title>
+</head>
+
+<body>
+
+<section class="vh-100 gradient-custom">
+    <div class=" row pt-3" style="width: 90%">
+        <div class="col-10"><h5 class="text-right text-white" style="margin-left: 85%; margin-top: 0.1em; ">Xin
+            Chào ${user.name} !</h5></div>
+        <div class="col">
+            <button class="btn btn-outline-light btn-dark">Đăng xuất</button>
+        </div>
+    </div>
+    <h1 class="mb-5 text-center pt-4 text-white">Danh sách các ứng viên vị trí ${position[1]}</h1>
+    <div class="container py-5">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="">
+                <div class="" style="border-radius: 1rem;">
+                    <div class="container text-center mt-5">
+                        <form action="/GoloVote/vote" method="get">
+                            <table class="table">
+                                <thead class="table-dark">
+                                <tr>
+                                    <th scope="col">stt</th>
+                                    <th scope="col">Tên ứng viên</th>
+                                    <th scope="col">Hình ảnh</th>
+                                    <th scope="col">Thông tin chi tiết</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody class="text-white">
+<!--                                <c:forEach var="candidate" items="${candidates}">-->
+                                    <tr>
+                                        <th scope="row" class="align-middle">${candidate.id} <input type="hidden"
+                                                                                                    name="idCandidate"
+                                                                                                    value="${candidate.id}"/>
+                                        </th>
+                                        <td class="align-middle candidateName" id="candidateName">
+<!--                                            <c:out value="${candidate.name}"/>-->
+                                        </td>
+                                        <td><img class="avatar-candidate" th:src="@{/images/aaa.png}" style="width: 40%"></td>
+                                        <td class="align-middle"><a class="text-decoration-none text-white" href="#">Thông
+                                            tin chi tiết</a></td>
+                                        <td class="align-middle"><label><input type="radio" id='express'
+                                                                               name="candidateName"
+                                                                               value="${candidate.name}|${candidate.id}"> Bình
+                                            chọn</label></td>
+                                    </tr>
+<!--                                </c:forEach>-->
+                                </tbody>
+                            </table>
+
+                            <div class="mt-5">
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn border btn-lg btn-dark" data-toggle="modal"
+                                        data-target="#exampleModal" onclick="getCandidate();">
+                                    Xác nhận
+                                </button>
+
+                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                     aria-labelledby="exampleModalLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">XÁC NHẬN THÔNG TIN</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <span id="candidate"></span>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bỏ
+                                                    phiếu lại
+                                                </button>
+                                                <input type="hidden" name="position" value="${position[0]}"/>
+                                                <input type="hidden" name="userName" value="${user.name}"/>
+                                                <input type="hidden" name="idUser" value="${user.id}"/>
+												<input type="hidden" id="candidateID" name="candidateID" value=""/>
+                                                <button type="submit" class="btn btn-dark" id="btn-confirm">Xác nhận
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+</body>
+
+
+<script src='<c:url value= "/views/web/myJS.js"/>'></script>
+<script type="text/javascript">
+    function getCandidate() {
+
+        var radios = document.getElementsByName('candidateName');
+        var chosenCandidate;
+		var str;
+
+        for (var i = 0, length = radios.length; i < length; i++) {
+
+            if (radios[i].checked == true) {
+                console.log(radios[i].value);
+                str = radios[i].value;
+                break;
+            }
+        }
+
+		var arr = str.split("|",2);
+		chosenCandidate = arr[0];
+		var idCandidate = arr[1];
+
+        if (chosenCandidate == null) {
+            console.log("hello");
+            document.getElementById('candidate').innerHTML = "vui lòng chọn ứng viên của bạn";
+            document.getElementById('btn-confirm').classList.add("d-none");
+        } else {
+            document.getElementById('btn-confirm').classList.remove("d-none");
+			document.getElementById("candidateID").value = idCandidate;
+
+			document.getElementById('candidate').innerHTML = "Bạn xác nhận bỏ phiếu cho " + chosenCandidate + " ?";
+        }
+    }
+
+</script>
+</html>
