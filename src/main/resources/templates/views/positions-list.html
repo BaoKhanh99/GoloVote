@@ -32,10 +32,12 @@
 </head>
 <body>
 
-<section class="vh-100 gradient-custom">
+<section class="vh-100 gradient-custom" >
     <div class=" row pt-3 " style="width: 90%">
-        <div class="col-10"><h5 class="text-right text-white" style="margin-left: 85%; margin-top: 0.1em; ">Xin
-            Chào ${user.name} !</h5></div>
+        <div class="col-10">
+            <h5 class="text-right text-white" style="margin-left: 85%; margin-top: 0.1em;" th:text="${'xin chao '+account.username}"  >
+            </h5>
+        </div>
         <div class="col">
             <button class="btn btn-outline-light btn-dark">Đăng xuất</button>
         </div>
