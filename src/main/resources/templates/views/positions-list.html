@@ -35,11 +35,11 @@
 <section class="vh-100 gradient-custom" >
     <div class=" row pt-3 " style="width: 90%">
         <div class="col-10">
-            <h5 class="text-right text-white" style="margin-left: 85%; margin-top: 0.1em;" th:text="${'xin chao '+account.username}"  >
+            <h5 class="text-right text-white" style="margin-left: 85%; margin-top: 0.1em;" th:text="${'xin chao '+session.userName}"  >
             </h5>
         </div>
         <div class="col">
-            <button class="btn btn-outline-light btn-dark">Đăng xuất</button>
+            <a class="btn btn-outline-light btn-dark" th:href="@{/logout}">Đăng xuất</a>
         </div>
     </div>
     <h1 class="mb-5 text-center pt-4 text-white">Danh sách các chức vụ</h1>
@@ -55,7 +55,7 @@
                                     <h5>Bầu Lớp Trưởng</h5>
                                 </div>
                                 <div class="col-6 vertical-center">
-                                    <h5 class="text-danger">
+                                    <h5 class="text-danger" th:text="'*Bạn đã bầu cho ${candidateList[0].name }'">
                                         *Bạn đã bầu cho ${candidateList[0].name }
                                     </h5>
                                 </div>

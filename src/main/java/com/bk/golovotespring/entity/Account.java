@@ -13,6 +13,7 @@ public class Account {
     private Integer idAccount;;
     private String username;
     private String password;
+
     @OneToMany(mappedBy = "account")
     @JsonBackReference
     private Set<AccountRole> accountRoleList;
@@ -48,4 +49,5 @@ public class Account {
     public void setAccountRoleList(Set<AccountRole> accountRoleList) {
         this.accountRoleList = accountRoleList;
     }
+
 }

@@ -38,7 +38,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/posting").access("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')");
         http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");
         http.authorizeRequests().and().formLogin()//
-
                 .loginProcessingUrl("/permission-check")
                 .loginPage("/home-page")//
                 .defaultSuccessUrl("/position-list")//đây Khi đăng nhập thành công thì vào trang này. userAccountInfo sẽ được khai báo trong controller để hiển thị trang view tương ứng
@@ -46,7 +45,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username")// tham số này nhận từ form login ở bước 3 có input  name='username'
                 .passwordParameter("password")// tham số này nhận từ form login ở bước 3 có input  name='password'
                 // Cấu hình cho Logout Page. Khi logout mình trả về trang
-                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/");
+                .and().logout().invalidateHttpSession(true).clearAuthentication(true).logoutUrl("/logout")
+                .deleteCookies("JSESSIONID")
+                .deleteCookies("SESSION")
+                .logoutSuccessUrl("/").permitAll();
 
     }
 }
