@@ -10,13 +10,31 @@ import java.util.Set;
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idAccount;;
+    private Integer idAccount;
+
+    @Column(name = "username")
     private String username;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "display_name")
+    private String displayName;
+
+    @OneToMany(mappedBy = "account")
+    private Set<UserVote> userVotes;
 
     @OneToMany(mappedBy = "account")
     @JsonBackReference
     private Set<AccountRole> accountRoleList;
+
+    public Account() {
+    }
+
+    public Account(Integer idAccount) {
+        this.idAccount = idAccount;
+
+    }
 
     public Integer getIdAccount() {
         return idAccount;
@@ -50,4 +68,19 @@ public class Account {
         this.accountRoleList = accountRoleList;
     }
 
+    public String getName() {
+        return displayName;
+    }
+
+    public void setName(String name) {
+        this.displayName = name;
+    }
+
+    public Set<UserVote> getUserVotes() {
+        return userVotes;
+    }
+
+    public void setUserVotes(Set<UserVote> userVotes) {
+        this.userVotes = userVotes;
+    }
 }

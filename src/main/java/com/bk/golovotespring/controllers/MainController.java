@@ -1,27 +1,35 @@
 package com.bk.golovotespring.controllers;
 
 import com.bk.golovotespring.entity.Account;
-import com.bk.golovotespring.entity.User;
-import com.bk.golovotespring.service.UserService;
+import com.bk.golovotespring.entity.Candidate;
+import com.bk.golovotespring.entity.Position;
+import com.bk.golovotespring.entity.UserVote;
+import com.bk.golovotespring.repository.AccountRepository;
+import com.bk.golovotespring.service.CandidateService;
+import com.bk.golovotespring.service.PositionService;
+import com.bk.golovotespring.service.UserVoteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Controller
 public class MainController {
 
     @Autowired
-    UserService userService;
+    AccountRepository accountRepository;
+
+    @Autowired
+    UserVoteService userVoteService;
 
     @GetMapping("/")
     public String index() {
@@ -35,26 +43,68 @@ public class MainController {
     }
 
     @GetMapping("/position-list")
-    public String positionListPage(Model model, HttpServletRequest req){
+    public String positionListPage( HttpServletRequest req, Model model){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username;
-        User user = new User();
+        Account account = new Account();
         if (principal instanceof UserDetails) {
              username = ((UserDetails)principal).getUsername();
-             user = userService.findUserByAccount(username);
+             account = accountRepository.findByUsername(username);
 
         } else {
              username = principal.toString();
         }
         HttpSession session = req.getSession();
-        session.setAttribute("userID", user.getId());
-        session.setAttribute("userName", user.getName());
+        session.setAttribute("userID", account.getIdAccount());
+        session.setAttribute("userName", account.getName());
+        int idAccount = account.getIdAccount();
+        List<UserVote> userVoteList =  userVoteService.findUserVoteByAccount_IdAccount(idAccount);
+        List<Position> positionList = new ArrayList<>();
+        List<Candidate> candidateList = new ArrayList<>();
+
+        for (UserVote userVote : userVoteList) {
+            positionList.add(userVote.getPosition());
+            candidateList.add(userVote.getCandidate());
+        }
+
+        List<Integer> idPositionList = new ArrayList<>();
+
+        for (Position position: positionList) {
+            idPositionList.add(position.getId());
+        }
+
+        model.addAttribute("idPosition", idPositionList);
+        model.addAttribute("candidateList", candidateList);
+        model.addAttribute(userVoteList);
         return "views/positions-list";
     }
 
-    @GetMapping("/candidate-list/{position}")
-    public String CandidateListPage(@PathVariable("position")String position){
+    @Autowired
+    PositionService positionService;
+
+    @Autowired
+    CandidateService candidateService;
+
+    @GetMapping("/candidate-list/{idPosition}")
+    public String CandidateListPage(@PathVariable("idPosition")String idPosition, Model model){
+        Position position = positionService.findPositionById(Integer.parseInt(idPosition));
+        List<Candidate> candidateList = candidateService.findCandidateByPositionId(Integer.parseInt(idPosition));
+
+        model.addAttribute("position", position);
+        model.addAttribute("candidateList", candidateList);
+
         return "views/candidate-list";
+    }
+
+    @GetMapping("/vote")
+    public String voteCandidate(@RequestParam("idCandidate") String idCandidate, @RequestParam("idPosition") String idPosition, HttpServletRequest request){
+
+        HttpSession session = request.getSession();
+
+        UserVote userVote = new UserVote( new Account((Integer) session.getAttribute("userID")), new Position(Integer.parseInt(idPosition)), new Candidate(Integer.parseInt(idCandidate)));
+        userVoteService.save(userVote);
+
+        return "redirect:/position-list";
     }
 
     @GetMapping("/successful-vote-page")

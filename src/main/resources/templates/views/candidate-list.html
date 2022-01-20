@@ -27,23 +27,22 @@
 
 <section class="vh-100 gradient-custom">
     <div class=" row pt-3" style="width: 90%">
-        <div class="col-10"><h5 class="text-right text-white" style="margin-left: 85%; margin-top: 0.1em; ">Xin
-            Chào ${user.name} !</h5></div>
+        <h5 class="text-right text-white" style="margin-left: 85%; margin-top: 0.1em;" th:text="${'xin chào '+session.userName}">
         <div class="col">
             <button class="btn btn-outline-light btn-dark">Đăng xuất</button>
         </div>
     </div>
-    <h1 class="mb-5 text-center pt-4 text-white">Danh sách các ứng viên vị trí ${position[1]}</h1>
+    <h1 class="mb-5 text-center pt-4 text-white">Danh sách các ứng viên vị trí <span th:text="${position.getPositionName()}"></span></h1>
     <div class="container py-5">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="">
                 <div class="" style="border-radius: 1rem;">
                     <div class="container text-center mt-5">
-                        <form action="/GoloVote/vote" method="get">
+                        <form th:action="@{/vote}" method="get">
                             <table class="table">
                                 <thead class="table-dark">
                                 <tr>
-                                    <th scope="col">stt</th>
+                                    <th scope="col">ID</th>
                                     <th scope="col">Tên ứng viên</th>
                                     <th scope="col">Hình ảnh</th>
                                     <th scope="col">Thông tin chi tiết</th>
@@ -52,30 +51,26 @@
                                 </thead>
                                 <tbody class="text-white">
 <!--                                <c:forEach var="candidate" items="${candidates}">-->
-                                    <tr>
-                                        <th scope="row" class="align-middle">${candidate.id} <input type="hidden"
-                                                                                                    name="idCandidate"
-                                                                                                    value="${candidate.id}"/>
+                                    <tr th:each="candidate : ${candidateList}">
+                                        <th scope="row" class="align-middle"><span name="idCandidate" th:text="${candidate.id}"></span>
+<!--                                            <input type="hidden" name="idCandidate" value="${candidate.id}"/>-->
                                         </th>
                                         <td class="align-middle candidateName" id="candidateName">
-<!--                                            <c:out value="${candidate.name}"/>-->
+                                            <span th:text="${candidate.name}"></span>
                                         </td>
                                         <td><img class="avatar-candidate" th:src="@{/images/aaa.png}" style="width: 40%"></td>
                                         <td class="align-middle"><a class="text-decoration-none text-white" href="#">Thông
                                             tin chi tiết</a></td>
-                                        <td class="align-middle"><label><input type="radio" id='express'
-                                                                               name="candidateName"
-                                                                               value="${candidate.name}|${candidate.id}"> Bình
+                                        <td class="align-middle"><label>
+                                            <input type="radio" id='express' name="candidateName" th:value="${candidate.name}+'|'+${candidate.id}"> Bình
                                             chọn</label></td>
                                     </tr>
-<!--                                </c:forEach>-->
                                 </tbody>
                             </table>
 
                             <div class="mt-5">
                                 <!-- Button trigger modal -->
-                                <button type="button" class="btn border btn-lg btn-dark" data-toggle="modal"
-                                        data-target="#exampleModal" onclick="getCandidate();">
+                                <button type="button" class="btn border btn-lg btn-dark" data-toggle="modal" data-target="#exampleModal" onclick="getCandidate();">
                                     Xác nhận
                                 </button>
 
@@ -95,15 +90,10 @@
                                                 <span id="candidate"></span>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bỏ
-                                                    phiếu lại
-                                                </button>
-                                                <input type="hidden" name="position" value="${position[0]}"/>
-                                                <input type="hidden" name="userName" value="${user.name}"/>
-                                                <input type="hidden" name="idUser" value="${user.id}"/>
-												<input type="hidden" id="candidateID" name="candidateID" value=""/>
-                                                <button type="submit" class="btn btn-dark" id="btn-confirm">Xác nhận
-                                                </button>
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bỏ phiếu lại</button>
+                                                <input type="hidden" name="idPosition" th:value="${position.id}"/>
+												<input type="hidden" id="idCandidate" name="idCandidate"/>
+                                                <button type="submit" class="btn btn-dark" id="btn-confirm">Xác nhận </button>
                                             </div>
                                         </div>
                                     </div>
@@ -117,39 +107,35 @@
     </div>
 </section>
 
-
 </body>
 
-
-<script src='<c:url value= "/views/web/myJS.js"/>'></script>
 <script type="text/javascript">
     function getCandidate() {
 
         var radios = document.getElementsByName('candidateName');
         var chosenCandidate;
 		var str;
+        var idCandidate;
 
         for (var i = 0, length = radios.length; i < length; i++) {
 
             if (radios[i].checked == true) {
-                console.log(radios[i].value);
                 str = radios[i].value;
                 break;
+            }else {
+                chosenCandidate = null;
             }
         }
-
-		var arr = str.split("|",2);
-		chosenCandidate = arr[0];
-		var idCandidate = arr[1];
-
-        if (chosenCandidate == null) {
+        if (str == null) {
             console.log("hello");
             document.getElementById('candidate').innerHTML = "vui lòng chọn ứng viên của bạn";
             document.getElementById('btn-confirm').classList.add("d-none");
         } else {
+            let arr = str.split("|",2);
+            chosenCandidate = arr[0];
+            idCandidate = arr[1];
             document.getElementById('btn-confirm').classList.remove("d-none");
-			document.getElementById("candidateID").value = idCandidate;
-
+			document.getElementById("idCandidate").value = idCandidate;
 			document.getElementById('candidate').innerHTML = "Bạn xác nhận bỏ phiếu cho " + chosenCandidate + " ?";
         }
     }
