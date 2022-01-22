@@ -21,9 +21,6 @@ public class Candidate {
     @Column(name = "link")
     private String link;
 
-    @OneToOne()
-    @JoinColumn(name="id_position", nullable=false)
-    private Position position;
 
     @OneToMany(mappedBy = "candidate")
     private Set<UserVote> userVotes;
@@ -75,12 +72,5 @@ public class Candidate {
         this.userVotes = userVotes;
     }
 
-    public Position getPosition() {
-        return position;
-    }
-
-    public void setPosition(Position position) {
-        this.position = position;
-    }
 }
 

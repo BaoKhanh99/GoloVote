@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface CandidateRepository extends JpaRepository<Candidate, Integer> {
 
-    List<Candidate> findCandidateByPositionId(int idPosition);
+    List<Candidate> findAll();
 }

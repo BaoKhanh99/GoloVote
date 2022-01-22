@@ -12,7 +12,16 @@
 </head>
 
 <body>
-    <section class="vh-100 gradient-custom">
+    <section class="gradient-custom">
+        <div class=" row pt-3 " style="width: 90%">
+            <div class="col-10">
+                <h5 class="text-right text-white" style="margin-left: 85%; margin-top: 0.1em;" th:text="${'xin chao '+session.userName}"  >
+                </h5>
+            </div>
+            <div class="col">
+                <a class="btn btn-outline-light btn-dark" th:href="@{/logout}">Đăng xuất</a>
+            </div>
+        </div>
         <div class="container py-5">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="jumbotron ">
@@ -22,17 +31,29 @@
 
                                 <div class="container text-center">
                                     <h1 class="text-center">BẠN ĐÃ BỎ PHIẾU THÀNH CÔNG!</h1>
-                                    <p><h2>Mã bầu cử của bạn là: ${hashBlock}</h2></p>
+                                    <p><h2>Mã bầu cử của bạn là: <span th:text="${block.getHash()}"></span> </h2></p>
                                     <p class="mt-4"><h4>Chi tiết thông tin</h4></p>
-                                    <p><b>Người bầu cử: </b>${userName}</p>
-                                    <div class="mx-1">
-                                        <p><b>Ứng viên lớp trưởng: </b>${captain}</p>
-                                        <p><b>Ứng viên lớp lớp phó: </b>${viceMonitor}</p>
-                                        <p><b>Ứng viên lớp phó văn nghệ: </b>${art}</p>
+                                    <p><b>Người bầu cử: <span th:text="${session.userName}"></span></b></p>
+                                    <div class="mx-1" th:each="uservote : ${userVotes}" th:switch="${uservote.getPosition().getId()}">
+                                        <span th:case="1">
+                                            <p><b>Ứng viên lớp trưởng:</b>
+                                                <span th:text=" ${uservote.getCandidate().getName()}"></span>
+                                            </p>
+                                        </span>
+                                        <span th:case="2">
+                                            <p><b>Ứng viên lớp trưởng:</b>
+                                                <span th:text=" ${uservote.getCandidate().getName()}"></span>
+                                            </p>
+                                        </span>
+                                        <span th:case="3">
+                                            <p><b>Ứng viên lớp trưởng:</b>
+                                                <span th:text=" ${uservote.getCandidate().getName()}"></span>
+                                            </p>
+                                        </span>
                                     </div>
 
-                                    <p><b>Thời gian: </b>${votedTime}</p>
-                                    a<a class="btn btn-dark btn-outline-light btn-lg mt-3" th:href="@{/voted-list}">Xem danh sách</a>
+                                    <p><b>Thời gian: </b><span th:text="${block.getTime()}"></span></p>
+                                    <a class="btn btn-dark btn-outline-light btn-lg mt-3" th:href="@{/voted-list}">Xem danh sách</a>
                                 </div>
                             </div>
                         </div>

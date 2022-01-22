@@ -14,7 +14,7 @@ public class CandidateServiceImpl implements CandidateService {
     @Autowired
     CandidateRepository repository;
 
-    public List<Candidate> findCandidateByPositionId(int idPosition){
-        return repository.findCandidateByPositionId(idPosition);
+    public List<Candidate> findAll(){
+        return repository.findAll();
     }
 }

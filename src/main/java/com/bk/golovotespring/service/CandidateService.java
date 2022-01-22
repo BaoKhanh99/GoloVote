@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface CandidateService {
 
-    List<Candidate> findCandidateByPositionId(int idPosition);
+    List<Candidate> findAll();
 }

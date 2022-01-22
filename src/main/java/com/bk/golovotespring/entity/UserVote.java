@@ -22,7 +22,6 @@ public class UserVote {
     @JoinColumn(name="id_candidate", nullable=false)
     private Candidate candidate;
 
-
     public UserVote() {
     }
 

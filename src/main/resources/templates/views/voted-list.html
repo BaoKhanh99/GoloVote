@@ -25,12 +25,17 @@
 
 <body>
 
-    <section class="vh-100 gradient-custom">
-        <div class=" row pt-3 " style="width: 100%">
-            <div class="col-10"><h5 class="text-right text-white" style="margin-left: 85%; margin-top: 0.1em; ">Xin Chào  !</h5></div>
-            <div class="col"><button class="btn btn-outline-light btn-dark">Đăng xuất</button></div>
+    <section class="gradient-custom">
+        <div class=" row pt-3 " style="width: 90%">
+            <div class="col-10">
+                <h5 class="text-right text-white" style="margin-left: 85%; margin-top: 0.1em;" th:text="${'xin chao '+session.userName}"  >
+                </h5>
+            </div>
+            <div class="col">
+                <a class="btn btn-outline-light btn-dark" th:href="@{/logout}">Đăng xuất</a>
+            </div>
         </div>
-        <div class="text-right w-75 text-white h5" style="margin-top: 1%; margin-left: 50%">mã phiếu: </div>
+        <div class="text-right text-white h5" style="margin-top: 0.4%; margin-left: 40%">mã phiếu của bạn: <span th:text="${block.getHash()}"></span> </div>
         <form th:action="@{/searchBlock}" method="get">
             <div class="input-group mb-3 w-50 pt-5" style="margin-right: auto; margin-left: auto;">
                 <input type="text" class="form-control form-control-lg" placeholder="Tìm kiếm mã phiếu" name="hashBlock">
@@ -40,31 +45,31 @@
                 </div>
             </div>
         </form>
-        <h1 class="mb-5 text-center pt-5 text-white">Danh Sách các ứng viên đã bình chọn</h1>
+        <h1 class="mb-5 text-center pt-5 text-white">Danh sách bạn đã bình chọn</h1>
 
         <div class="container">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="">
+                    <div class="text-end w-75 text-white mb-3">Thời gian bình chọn: <span th:text="${block.getTime()}"></span></div>
                     <div class="" style="border-radius: 1rem;">
                         <div class="container text-center">
                                 <table class="table">
                                     <thead class="table-dark">
                                     <tr>
-                                        <th scope="col">stt</th>
+                                        <th scope="col">ID</th>
                                         <th scope="col">Tên ứng viên</th>
                                         <th scope="col">Vị trí</th>
                                         <th scope="col">Thông tin chi tiết</th>
                                         <th scope="col">Số Phiếu</th>
                                     </tr>
                                     </thead>
-                                    <tbody class="text-white">
-
-                                            <tr>
-                                                <th scope="row"></th>
-                                                <td></td>
-                                                <td></td>
+                                    <tbody class="text-white" >
+                                            <tr th:each="totalVote : ${totalVotes}">
+                                                <th scope="row"><span th:text="${totalVote.getIdCandidate()}"></span> </th>
+                                                <td><span th:text="${totalVote.getCandidateName()}"></span> </td>
+                                                <td><span th:text="${totalVote.getPositionName()}"></span></td>
                                                 <td><a class="text-decoration-none text-white" href="#">thông tin chi tiết</a></td>
-                                                <td></td>
+                                                <td><span th:text="${totalVote.getTotal()}"></span></td>
                                             </tr>
                                     </tbody>
                                 </table>

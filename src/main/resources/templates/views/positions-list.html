@@ -55,8 +55,8 @@
                                     <h5>Bầu Lớp Trưởng</h5>
                                 </div>
                                 <div class="col-6 vertical-center">
-                                    <h5 class="text-danger" th:each="candidate : ${candidateList}" th:if="${candidate.position.getId()} == 1" th:text="'*Bạn đã bầu cho ' +${candidate.getName()}">
-                                        a
+                                    <h5 class="text-danger" th:each="uservote : ${userVoteList}" th:if="${uservote.getPosition().getId()} == 1" th:text="'*Bạn đã bầu cho ' +${uservote.getCandidate().getName()}">
+                                        s
                                     </h5>
                                 </div>
                                 <div class="col-2">
@@ -72,7 +72,7 @@
                                     <h5>Bầu Lớp Phó</h5>
                                 </div>
                                 <div class="col-6 vertical-center">
-                                    <h5 class="text-danger" th:each="candidate : ${candidateList}" th:if="${candidate.position.getId()} == 2" th:text="'*Bạn đã bầu cho ' +${candidate.getName()}">
+                                    <h5 class="text-danger" th:each="uservote : ${userVoteList}" th:if="${uservote.getPosition().getId()} == 2" th:text="'*Bạn đã bầu cho ' +${uservote.getCandidate().getName()}">
                                         a
                                     </h5>
                                 </div>
@@ -88,7 +88,7 @@
                                     <h5>Bầu Lớp Phó Văn Nghệ</h5>
                                 </div>
                                 <div class="col-6 vertical-center">
-                                    <h5 class="text-danger" th:each="candidate : ${candidateList}" th:if="${candidate.position.getId()} == 3" th:text="'*Bạn đã bầu cho ' +${candidate.getName()}">
+                                    <h5 class="text-danger" th:each="uservote : ${userVoteList}" th:if="${uservote.getPosition().getId()} == 3" th:text="'*Bạn đã bầu cho ' +${uservote.getCandidate().getName()}">
                                         a
                                     </h5>
                                 </div>
@@ -104,11 +104,14 @@
                             <div class="mb-3">
                                 <b class="h5">Xác nhận bầu thành công</b>
                             </div>
-                            <form action="/GoloVote/confirmVoting" method="post">
+                            <form th:action="@{/confirm-vote}" method="post">
                                 <input type="hidden" value="${user.id}" name="idUser">
                                 <input type="hidden" value="${user.name}" name="userName">
-                                <input type="submit" class="text-center btn btn-dark btn-outline-light btn-lg disabled"
-                                   value="Xác Nhận" >
+                                <div th:switch="${#lists.contains(idPosition, 1)} and ${#lists.contains(idPosition, 2)} and ${#lists.contains(idPosition, 3)}">
+                                    <input th:case="true" type="submit" class="text-center btn btn-dark btn-outline-light btn-lg " value="Xác Nhận" >
+                                    <input th:case="false" type="submit" class="text-center btn btn-dark btn-outline-light btn-lg disabled" value="Xác Nhận" style="border-color: white">
+                                </div>
+
                             </form>
                         </div>
 

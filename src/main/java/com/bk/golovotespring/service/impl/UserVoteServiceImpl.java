@@ -1,5 +1,6 @@
 package com.bk.golovotespring.service.impl;
 
+import com.bk.golovotespring.entity.TotalVote;
 import com.bk.golovotespring.entity.UserVote;
 import com.bk.golovotespring.repository.UserVoteRepository;
 import com.bk.golovotespring.service.UserVoteService;
@@ -23,4 +24,11 @@ public class UserVoteServiceImpl implements UserVoteService {
 
         return userVoteRepository.findUserVoteByAccount_IdAccount(idAccount);
     }
+
+    @Override
+    public List<TotalVote> findAllTotalVoteByPosition(int idPosition) {
+        return userVoteRepository.findAllTotalVoteByPosition(idPosition);
+    }
+
+
 }

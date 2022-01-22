@@ -17,9 +17,6 @@ public class Position {
     @OneToMany(mappedBy = "position")
     private Set<UserVote> userVotes;
 
-    @OneToOne(mappedBy = "position")
-    private Candidate candidate;
-
     public Position() {
     }
 
@@ -49,13 +46,5 @@ public class Position {
 
     public void setUserVotes(Set<UserVote> userVotes) {
         this.userVotes = userVotes;
-    }
-
-    public Candidate getCandidate() {
-        return candidate;
-    }
-
-    public void setCandidate(Candidate candidate) {
-        this.candidate = candidate;
     }
 }

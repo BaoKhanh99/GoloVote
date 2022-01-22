@@ -24,6 +24,9 @@ public class Account {
     @OneToMany(mappedBy = "account")
     private Set<UserVote> userVotes;
 
+    @OneToOne(mappedBy = "account")
+    private UserBlock userBlock;
+
     @OneToMany(mappedBy = "account")
     @JsonBackReference
     private Set<AccountRole> accountRoleList;
@@ -83,4 +86,13 @@ public class Account {
     public void setUserVotes(Set<UserVote> userVotes) {
         this.userVotes = userVotes;
     }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
 }
