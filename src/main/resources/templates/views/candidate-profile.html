@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Thông tin các ứng viên bầu cử.</title>
+    <meta name="description" content="This theme is best suitable for Saas app and service based startups.">
+    <meta name="keywords" content="SaaS App Theme">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Standard favicon -->
+    <link rel="icon" type="image/png" th:href="@{/assets/images/favicon.png}">
+
+    <!-- Helps prevent duplicate content issues -->
+    <link rel="canonical" href="">
+
+    <script th:src="@{https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js}"></script>
+    <script th:src="@{https://oss.maxcdn.com/respond/1.4.2/respond.min.js}"></script>
+    <![endif]-->
+
+    <!-- Facebook Open Graph -->
+    <meta property="og:title" content="Abdera SaaS App Theme: Themes For App. It's Free."/>
+    <meta property="og:image" content="https://themesfor.app/preview/assets/images/abdera.png"/>
+    <meta property="og:site_name" content="Themes For App: 4 new themes every 4 weeks. It's Free."/>
+    <meta property="og:description" content="This theme is best suitable for Saas app and service based startups."/>
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:url" content="https://themesfor.app/themes/abila">
+    <meta name="twitter:title" content="Abdera SaaS App Theme: Themes For App. It's Free.">
+    <meta name="twitter:description" content="This theme is best suitable for Saas app and service based startups.">
+    <meta name="twitter:image" content="https://themesfor.app/preview/assets/images/abdera.png">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/bootstrap.min.css}">
+
+    <!-- Default CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/default.css}">
+
+    <!-- Color CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/color.css}">
+
+    <!-- Font CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/font.css}">
+
+    <!-- Button CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/button.css}">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/profile.css}">
+
+</head>
+
+<body class="text-black base-font-size">
+
+    <div class="wrapper h-100">
+
+        <!-- Header -->
+        <header class="header bg-primary">
+            <!-- Empty Space -->
+            <div class="sm-space"></div>
+            <!--/ End Empty Space -->
+            <div class="header-inner">
+                <nav class="navbar">
+<!--                    <div class="container">-->
+<!--                        <a th:href="/" class="btn btn-md btn-round btn-secondary px-4">Trang chủ</a>-->
+<!--                    </div>-->
+                </nav>
+            </div>
+            <!-- Empty Space -->
+            <div class="sm-space bg-primary"></div>
+            <!--/ End Empty Space -->
+        </header>
+        <div class=" row" style="width: 90%">
+            <div class="col-10">
+                <h5 class="text-right text-white" style="margin-left: 85%; margin-top: 0.1em;" th:text="${'xin chao '+session.userName}"  >
+                </h5>
+            </div>
+            <div class="col">
+                <a class="btn btn-outline-light btn-dark" th:href="@{/logout}">Đăng xuất</a>
+            </div>
+        </div>
+        <!-- Pricing -->
+        <section class="pricing bg-light-primary">
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-10 mx-auto">
+                        <div class="row align-items-center">
+                            <div class="container2">
+                                <div class="avatar-flip">
+                                  <img th:src="@{${'/images/'+ candidate.getImage()}}" height="150" width="150">
+                                  <img th:src="@{${'/images/'+ candidate.getImage()}}" height="150" width="150">
+                                </div>
+                                <h2 class="text-light-gray"><span th:text="${candidate.getName()}"></span> </h2>
+
+                                <h4>SOLOGAN: <span th:text="${candidate.getSlogan()}"></span> </h4>
+                                <p class="text-light-gray">Ngày sinh: <span th:text="${candidate.getBirthDay()}"></span> </p>
+                                <p class="text-light-gray">Mã Sinh viên - Lớp: <span th:text="${candidate.getIdStudent()}+' - '+${candidate.getGrade()}"></span> </p>
+                                <p class="text-light-gray">Số điện thoại: <span th:text="${candidate.getPhoneNumber()}"></span> </p>
+                                <p class="text-light-gray">Thành tích nổi bật: <span th:text="${candidate.getAchievement()}"></span> </p>
+                                <p class="text-light-gray">Hoạt động nổi bật: <span th:text="${candidate.getActivity()}"></span> </p>
+                                
+                              </div>    
+                        </div>
+                        <!-- Empty Space -->
+                        <div class="md-space"></div>
+                        <!--/ End Empty Space -->
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+    <!-- jQuery Script -->
+    <script th:src="@{/assets/js/jquery.min.js}"></script>
+
+    <!-- Popper Script -->
+    <script th:src="@{/assets/js/popper.min.js}"></script>
+
+    <!-- Bootstrap Script -->
+    <script th:src="@{/assets/js/bootstrap.min.js}"></script>
+
+    <!-- Main Script -->
+    <script th:src="@{/assets/js/main.js}"></script>
+
+</body>
+
+</html>

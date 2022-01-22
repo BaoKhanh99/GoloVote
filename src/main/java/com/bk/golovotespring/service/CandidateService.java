@@ -7,4 +7,6 @@ import java.util.List;
 public interface CandidateService {
 
     List<Candidate> findAll();
+
+    Candidate findCandidateById(int id);
 }

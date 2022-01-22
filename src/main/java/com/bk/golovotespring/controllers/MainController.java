@@ -9,18 +9,17 @@ import com.bk.golovotespring.service.PositionService;
 import com.bk.golovotespring.service.UserVoteService;
 import com.google.gson.Gson;
 
+import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -137,18 +136,16 @@ public class MainController {
         List<UserVote> userVoteList = userVoteService.findUserVoteByAccount_IdAccount(idUser);
 
         int i = 0;
-        Ballot ballot = new Ballot();
+
         List<Ballot> ballotList = new ArrayList<>();
+        Account account = userVoteList.get(0).getAccount();
 
-        ballot.setIdUser(idUser);
-
-        UserVote userVote = null;
-        while (i < userVoteList.size()) {
-            userVote = userVoteList.get(i);
-            ballot.setIdCandidate(userVote.getCandidate().getId());
-            ballot.setIdPosition(userVote.getPosition().getId());
+        for (UserVote u: userVoteList) {
+            Ballot ballot = new Ballot();
+            ballot.setIdUser(idUser);
+            ballot.setIdCandidate(u.getCandidate().getId());
+            ballot.setIdPosition(u.getPosition().getId());
             ballotList.add(ballot);
-            i++;
         }
 
         UserBlock getLastBlock = userBlockRepository.findFirstByOrderByIdAsc();
@@ -159,9 +156,12 @@ public class MainController {
         newBlock.mineBlock(prefix);
         String jsonBlock = new Gson().toJson(newBlock);
 
+        System.out.println(jsonBlock);
+
         if (newBlock.getHash().substring(0, prefix).equals(prefixString)) {
-            blockchainRepository.save(new Blockchain(jsonBlock));
-            UserBlock userBlock = new UserBlock(newBlock.getHash(),userVote.getAccount(),new Blockchain(jsonBlock));
+            Blockchain blockchain = new Blockchain((jsonBlock));
+            blockchainRepository.save(blockchain);
+            UserBlock userBlock = new UserBlock(newBlock.getHash(),account, blockchain);
             userBlockRepository.save(userBlock);
         }
         ;
@@ -221,9 +221,40 @@ public class MainController {
         return "views/ranking-page";
     }
 
-    @GetMapping("/candidate-detail")
-    public String candidateDetail(){
+    @GetMapping("/candidate-profile/{idCandidate}")
+    public String candidateDetail(@PathVariable("idCandidate")String idCandidate, Model model){
+        Candidate candidate = candidateService.findCandidateById(Integer.parseInt(idCandidate));
+        model.addAttribute("candidate", candidate);
 
-        return "views/candidate-detail";
+        return "views/candidate-profile";
+    }
+
+    @RequestMapping(value = "/search-block",method = RequestMethod.GET )
+    public String searchBlock( Model model, @RequestParam("hashBlock")String hashBlock){
+
+        UserBlock userBlock = userBlockRepository.findUserBlockByHash(hashBlock);
+        Block blockFromJson = new Gson().fromJson(userBlock.getBlockchain().getBlock(), Block.class);
+
+        Type typeMyType = new TypeToken<ArrayList<Ballot>>(){}.getType();
+        List<Ballot> ballots = new Gson().fromJson(blockFromJson.getData(),typeMyType);
+
+        List<TotalVote> totalVotes = userVoteService.findAllTotalVote();
+        List<TotalVote> totalVotesFromBallot = new ArrayList<>();
+
+        for (int i = 0; i < ballots.size(); i++) {
+            System.out.println("=============================== "+ballots.get(i).getIdCandidate());
+            for (TotalVote totalVote : totalVotes) {
+                System.out.println("++++++++++++++++++++++++++++ "+totalVote.getCandidateName() );
+                if (ballots.get(i).getIdCandidate() == totalVote.getIdCandidate()){
+                    totalVotesFromBallot.add(totalVote);
+                    break;
+                }
+            }
+        }
+
+        model.addAttribute("block",blockFromJson);
+        model.addAttribute("totalVotes",totalVotesFromBallot);
+
+        return "views/search-block";
     }
 }

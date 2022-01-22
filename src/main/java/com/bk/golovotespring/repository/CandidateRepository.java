@@ -10,4 +10,6 @@ import java.util.List;
 public interface CandidateRepository extends JpaRepository<Candidate, Integer> {
 
     List<Candidate> findAll();
+
+    Candidate findCandidateById(int id);
 }

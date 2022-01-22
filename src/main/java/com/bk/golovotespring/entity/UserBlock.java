@@ -13,11 +13,11 @@ public class UserBlock {
     @Column(name = "hashblock")
     private String hash;
 
-    @OneToOne(cascade=CascadeType.ALL)
+    @OneToOne()
     @JoinColumn(name="id_account", nullable=false)
     private Account account;
 
-    @OneToOne(cascade=CascadeType.ALL)
+    @OneToOne()
     @JoinColumn(name="id_block", nullable=false)
     private Blockchain blockchain;
 

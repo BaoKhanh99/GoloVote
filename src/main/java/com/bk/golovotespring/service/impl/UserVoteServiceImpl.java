@@ -36,6 +36,11 @@ public class UserVoteServiceImpl implements UserVoteService {
     }
 
     @Override
+    public List<TotalVote> findAllTotalVote() {
+        return userVoteRepository.findAllTotalVote();
+    }
+
+    @Override
     public void delete(UserVote userVote) {
         userVoteRepository.delete(userVote);
     }

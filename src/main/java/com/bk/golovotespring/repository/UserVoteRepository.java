@@ -21,6 +21,12 @@ public interface UserVoteRepository extends JpaRepository<UserVote, Integer> {
             "GROUP BY idCandidate", nativeQuery = true)
     List<TotalVote> findAllTotalVoteByPosition(int id_position);
 
+    @Query(value = "SELECT *, COUNT(*) AS total " +
+            "from (select id_candidate as idCandidate , id_position as idPosition, name as candidateName, position_name as positionName, image as imageCandidate, id_student as idStudent \n" +
+            "from uservote inner join candidates on uservote.id_candidate = candidates.id \n" +
+            "inner join position on uservote.id_position = position.id) as a GROUP BY idCandidate", nativeQuery = true)
+    List<TotalVote> findAllTotalVote();
+
     UserVote findTopByAccount_IdAccountAndPositionId(int idUser, int idPosition);
 
     void deleteUserVoteByAccount_IdAccountAndPositionId(int idUser, int idPosition);

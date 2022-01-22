@@ -7,9 +7,8 @@ import javax.persistence.*;
 public class Blockchain {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column(name = "block", columnDefinition = "TEXT")
     private String block;
@@ -17,11 +16,11 @@ public class Blockchain {
     @OneToOne(mappedBy = "blockchain")
     private UserBlock userBlock;
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -40,4 +39,11 @@ public class Blockchain {
         this.block = block;
     }
 
+    public UserBlock getUserBlock() {
+        return userBlock;
+    }
+
+    public void setUserBlock(UserBlock userBlock) {
+        this.userBlock = userBlock;
+    }
 }
