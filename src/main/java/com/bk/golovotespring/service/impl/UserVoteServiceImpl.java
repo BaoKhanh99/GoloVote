@@ -30,5 +30,15 @@ public class UserVoteServiceImpl implements UserVoteService {
         return userVoteRepository.findAllTotalVoteByPosition(idPosition);
     }
 
+    @Override
+    public UserVote findTopByAccount_IdAccountAndPositionId(int idUser, int idPosition) {
+        return userVoteRepository.findTopByAccount_IdAccountAndPositionId(idUser, idPosition);
+    }
+
+    @Override
+    public void delete(UserVote userVote) {
+        userVoteRepository.delete(userVote);
+    }
+
 
 }

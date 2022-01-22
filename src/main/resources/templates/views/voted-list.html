@@ -24,7 +24,6 @@
 </head>
 
 <body>
-
     <section class="gradient-custom">
         <div class=" row pt-3 " style="width: 90%">
             <div class="col-10">
@@ -65,7 +64,7 @@
                                     </thead>
                                     <tbody class="text-white" >
                                             <tr th:each="totalVote : ${totalVotes}">
-                                                <th scope="row"><span th:text="${totalVote.getIdCandidate()}"></span> </th>
+                                                <th scope="row"><span th:text="${totalVote.getIdStudent()}"></span> </th>
                                                 <td><span th:text="${totalVote.getCandidateName()}"></span> </td>
                                                 <td><span th:text="${totalVote.getPositionName()}"></span></td>
                                                 <td><a class="text-decoration-none text-white" href="#">thông tin chi tiết</a></td>
@@ -77,6 +76,10 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div style="padding-top: 5%; padding-bottom: 6%" class="text-center">
+            <a th:href="@{/ranking-page}" class="btn btn-dark btn-outline-light btn-lg ">Bảng xếp hạng</a>
         </div>
     </section>
 </body>

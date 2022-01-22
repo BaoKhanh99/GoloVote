@@ -11,5 +11,4 @@ public interface UserBlockRepository extends JpaRepository<UserBlock, Integer> {
 
     UserBlock findFirstByOrderByIdAsc();
 
-
 }

@@ -8,8 +8,7 @@ import com.bk.golovotespring.service.CandidateService;
 import com.bk.golovotespring.service.PositionService;
 import com.bk.golovotespring.service.UserVoteService;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Controller
 public class MainController {
@@ -51,9 +49,6 @@ public class MainController {
         model.addAttribute(new Account());
         return "views/home-page";
     }
-
-//    @Autowired
-//    BlockchainService blockchainService;
 
     @GetMapping("/position-list")
     public String positionListPage( HttpServletRequest req, Model model){
@@ -111,10 +106,6 @@ public class MainController {
         model.addAttribute("position", position);
         model.addAttribute("candidateList", candidateList);
 
-
-
-        //model.addAttribute("resultSet",resultSet);
-
         return "views/candidate-list";
     }
 
@@ -122,8 +113,14 @@ public class MainController {
     public String voteCandidate(@RequestParam("idCandidate") String idCandidate, @RequestParam("idPosition") String idPosition, HttpServletRequest request){
 
         HttpSession session = request.getSession();
+        int idUser = (int) session.getAttribute("userID");
 
-        UserVote userVote = new UserVote( new Account((Integer) session.getAttribute("userID")), new Position(Integer.parseInt(idPosition)), new Candidate(Integer.parseInt(idCandidate)));
+        UserVote checkUserVote = userVoteService.findTopByAccount_IdAccountAndPositionId(idUser, Integer.parseInt(idPosition));
+        UserVote userVote;
+        if (checkUserVote != null) {
+            userVoteService.delete(checkUserVote);
+        }
+        userVote = new UserVote( new Account((Integer) session.getAttribute("userID")), new Position(Integer.parseInt(idPosition)), new Candidate(Integer.parseInt(idCandidate)));
         userVoteService.save(userVote);
 
         return "redirect:/position-list";
@@ -180,6 +177,11 @@ public class MainController {
         int idUser = (int) session.getAttribute("userID");
 
         UserBlock userBlock = userBlockRepository.findUserBlockByAccount_IdAccount(idUser);
+
+        if (userBlock == null){
+            return "redirect:/position-list";
+        }
+
         Block blockFromJson= new Gson().fromJson(userBlock.getBlockchain().getBlock(), Block.class);
 
         List<UserVote> userVotes = userVoteService.findUserVoteByAccount_IdAccount(idUser);
@@ -200,18 +202,21 @@ public class MainController {
     }
 
     @GetMapping("/ranking-page")
-    public String rankingPage(Model model){
+    public String rankingPage(Model model, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        int idUser = (int) session.getAttribute("userID");
+
+        if (userBlockRepository.findUserBlockByAccount_IdAccount(idUser) == null){
+            return "redirect:/position-list";
+        }
 
         List<TotalVote> totalVoteCaptain = userVoteService.findAllTotalVoteByPosition(1);
         List<TotalVote> totalVoteViceMonitor = userVoteService.findAllTotalVoteByPosition(2);
         List<TotalVote> totalVoteArt = userVoteService.findAllTotalVoteByPosition(3);
 
         model.addAttribute("totalVoteCaptain", totalVoteCaptain);
-        System.out.println("============================= "+totalVoteCaptain.get(0).getCandidateName());
         model.addAttribute("totalVoteViceMonitor", totalVoteViceMonitor);
-        System.out.println("============================= "+totalVoteViceMonitor.get(0).getCandidateName());
         model.addAttribute("totalVoteArt", totalVoteArt);
-        System.out.println("============================= "+totalVoteArt.get(0).getCandidateName());
 
         return "views/ranking-page";
     }
@@ -219,6 +224,6 @@ public class MainController {
     @GetMapping("/candidate-detail")
     public String candidateDetail(){
 
-        return "views/";
+        return "views/candidate-detail";
     }
 }

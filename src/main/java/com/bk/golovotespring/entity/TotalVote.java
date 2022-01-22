@@ -5,5 +5,7 @@ public interface TotalVote {
     int getIdCandidate();
     String getCandidateName();
     String getPositionName();
+    String getImageCandidate();
+    String getIdStudent();
     int getTotal();
 }

@@ -1,5 +1,5 @@
 $("#countdown-vote")
-    .countdown("2022/01/19", function(event) {
+    .countdown("2022/01/23", function(event) {
         console.log(event.elapsed)
             if (event.elapsed){
                 $("#timing-header").text("THỜI GIAN ĐÃ KẾT THÚC");

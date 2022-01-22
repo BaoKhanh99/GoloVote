@@ -12,4 +12,8 @@ public interface UserVoteService {
     List<UserVote> findUserVoteByAccount_IdAccount(int idAccount);
 
     List<TotalVote> findAllTotalVoteByPosition(int idPosition);
+
+    UserVote findTopByAccount_IdAccountAndPositionId(int idUser, int idPosition);
+
+    void delete(UserVote userVote);
 }
